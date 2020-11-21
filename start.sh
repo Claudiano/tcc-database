@@ -13,8 +13,26 @@ IP_DATABASE=192.168.16.1
 
 #docker-compose build app
 
+function determine_sgx_device {
+    export SGXDEVICE="/dev/sgx"
+    export MOUNT_SGXDEVICE="-v /dev/sgx/:/dev/sgx"
+    if [[ ! -e "$SGXDEVICE" ]] ; then
+        export SGXDEVICE="/dev/isgx"
+        export MOUNT_SGXDEVICE="--device=/dev/isgx"
+        if [[ ! -c "$SGXDEVICE" ]] ; then
+            echo "Warning: No SGX device found! Will run in SIM mode." > /dev/stderr
+            export MOUNT_SGXDEVICE=""
+            export SGXDEVICE=""
+        fi
+    fi
+}
+
+determine_sgx_device
+
+echo $SGXDEVICE
+
 # pega senha
-DB_PASSWORD=$(sudo docker run --rm --device "/dev/isgx" -it app-db python3 app.py 1 $IP_DATABASE 0)
+DB_PASSWORD=$(sudo docker run $MOUNT_SGXDEVICE --rm -it app-db python3 app.py 1 $IP_DATABASE 0)
 
 # Inicia o banco
 
@@ -25,6 +43,11 @@ DB_PASSWORD=$(sudo docker run --rm --device "/dev/isgx" -it app-db python3 app.p
 
 echo $DB_PASSWORD
 echo "ip do banco: " $IP_DATABASE
+echo $DB_USER
+echo $CONTAINER_NAME
+echo $POSTGRES_DB
+
+
 
 # realizar post da sessão do banco
 #CONTAINER_NAME='mycontainername'

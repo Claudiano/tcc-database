@@ -25,5 +25,5 @@ services:
     # - "database:database"
     #depends_on:
     #  - database
-    devices:
-      - "/dev/isgx:/dev/isgx"
+    #devices:
+    #  - "/dev/isgx:/dev/isgx"
