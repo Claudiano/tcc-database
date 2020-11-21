@@ -14,7 +14,7 @@ IP_DATABASE=192.168.16.1
 #docker-compose build app
 
 # pega senha
-DB_PASSWORD=$(docker run --rm -it app-db python3 app.py 1 $IP_DATABASE 0)
+DB_PASSWORD=$(sudo docker run --rm --device "/dev/isgx" -it app-db python3 app.py 1 $IP_DATABASE 0)
 
 # Inicia o banco
 
@@ -31,11 +31,11 @@ echo "ip do banco: " $IP_DATABASE
 
 if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
   echo exists
-  docker start ${CONTAINER_NAME}
+  sudo docker start ${CONTAINER_NAME}
 else
   # Criar o container do banco 
   echo 'does not exist'
-  docker run --name database -e POSTGRES_USER=$DB_USER -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=$POSTGRES_DB  postgres:9.6
+  sudo docker run --name $CONTAINER_NAME -e POSTGRES_USER=$DB_USER -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=$POSTGRES_DB  postgres:9.6
 fi
 
 
