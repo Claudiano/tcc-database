@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:9.6
+    container_name: "database"
+    environment:
+      - POSTGRES_DB=tccDB
+      #- POSTGRES_USER=postgres
+      #- POSTGRES_PASSWORD=
+    #   - TZ=GMT
+    # volumes:
+    #   - "./data/postgres:/var/lib/postgresql/data"
+    ports:
+      - 5432:5432
+
+    #depends_on: [app]
+
+  app:
+    build: .
+    #command: python3 app.py 1 0 0
+    image: app-db
+    container_name: app-db
+    #links: 
+    # - "database:database"
+    #depends_on:
+    #  - database

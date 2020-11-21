@@ -1,0 +1,23 @@
+name: api-session
+version: "0.2"
+predecessor: c9964eef961eb53f130e275ce6b5f31426e967b9bdfb052cb9babf97b73001b6
+
+services:
+   - name: api
+     image_name: api-pessoas_api
+     mrenclaves: [a542ee03cbe46706c3b86f2c5403acff2730b838ea99c935cb0797973c92a864]
+     command: python3 -u -m flask run --host=0.0.0.0 --port=8080 --without-threads
+     fspf_path: /api-pessoas/fspf.pb
+     fspf_key: 8d1a72c1d597f12eb17005ae19f65661ad97407005eb05a966c3fd02852dd04d
+     fspf_tag: 140cbc8374ae6134df5401268de9aedf
+     environment:
+         SCONE_MODE: hw
+         SECRET_KEY: "secret-jwt"
+         FLASK_APP: "/api-pessoas/run.py"
+         SECRET_KEY_DB: "apalapudia"
+         PATH_DATABASE: "postgres://rvunbbcf:Fj3cbsUBnFZPLrS07FR-OW2vlwDU-xx5@lallah.db.elephantsql.com:5432/rvunbbcf"
+        
+images:
+   - name: api-pessoas_api
+     #mrenclaves: [a542ee03cbe46706c3b86f2c5403acff2730b838ea99c935cb0797973c92a864]
+     #tags: [scone-python]
